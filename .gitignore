@@ -1,0 +1,7 @@
+node_modules
+.env
+
+# Ignore everything under /videos except videos/test
+/videos/*
+!/videos/test/
+!/videos/test/**
