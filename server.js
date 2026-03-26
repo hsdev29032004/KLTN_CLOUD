@@ -11,16 +11,27 @@ const app = express();
 
 // Cấu hình CORS cho phép frontend truy cập API và gửi cookie
 app.use(cors({
-  origin: ["http://127.0.0.1:5500", "http://localhost:5500"],
+  origin: ["http://127.0.0.1:5500", "http://localhost:5500", "http://localhost:3000", "http://localhost:3001"],
   credentials: true,
   methods: ["GET", "POST", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
+  allowedHeaders: [
+    "Content-Type",
+    "Authorization",
+    "x-url",
+    "x-encrypt-url",
+  ]
 }));
 
 // Ensure preflight requests are handled
 app.options('*', cors({
-  origin: ["http://127.0.0.1:5500", "http://localhost:5500"],
+  origin: ["http://127.0.0.1:5500", "http://localhost:5500", "http://localhost:3000", "http://localhost:3001"],
   credentials: true,
+  allowedHeaders: [
+    "Content-Type",
+    "Authorization",
+    "x-url",
+    "x-encrypt-url",
+  ]
 }));
 
 // simple request logger to help debugging

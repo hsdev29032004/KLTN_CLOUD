@@ -12,10 +12,17 @@ exports.streamVideo = (req, res) => {
   //   return res.status(403).end();
   // }
 
-  const filePath = path.join(VIDEO_ROOT, lessonId, filename);
+  let filePath = path.join(VIDEO_ROOT, lessonId, filename);
 
   if (!fs.existsSync(filePath)) {
-    return res.status(404).end();
+    const fallbackPath = path.join(VIDEO_ROOT, "test", filename);
+    if (fs.existsSync(fallbackPath)) {
+      filePath = fallbackPath;
+      usedFallback = true;
+      console.warn(`File not found for lesson ${lessonId}, serving test fallback: ${fallbackPath}`);
+    } else {
+      return res.status(404).end();
+    }
   }
 
   const stat = fs.statSync(filePath);
