@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Xem video HLS</title>
+
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 40px;
+      max-width: 700px;
+      margin: auto;
+    }
+
+    video {
+      width: 100%;
+      max-height: 420px;
+      background: black;
+      margin-top: 20px;
+    }
+
+    .info {
+      margin-top: 10px;
+      padding: 10px;
+      background: #f3f3f3;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>Xem video khóa học (HLS)</h2>
+
+  <div class="info">
+    Lesson ID:<br />
+    <b>lesson-965a89f0-d36b-4052-9726-635dfbc2232d</b>
+  </div>
+
+  <video id="player" controls></video>
+
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+  <script>
+    const LESSON_ID = "lesson-96041ea9-b5c0-4b76-87b2-6edd728c8c12";
+    const HLS_URL = `http://localhost:3002/api/videos/${LESSON_ID}/index.m3u8`;
+
+    const video = document.getElementById("player");
+
+    function play() {
+      if (Hls.isSupported()) {
+        const hls = new Hls({
+          xhrSetup(xhr) {
+            // bắt buộc để cookie HttpOnly được gửi
+            xhr.withCredentials = true;
+          }
+        });
+
+        hls.loadSource(HLS_URL);
+        hls.attachMedia(video);
+
+        hls.on(Hls.Events.ERROR, (event, data) => {
+          console.error("HLS error:", data);
+        });
+
+      } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+        // Safari (native HLS)
+        video.src = HLS_URL;
+      } else {
+        alert("Trình duyệt không hỗ trợ HLS");
+      }
+    }
+
+    play();
+  </script>
+
+</body>
+
+</html>
