@@ -6,6 +6,7 @@ const auth = require("./auth.middleware");
 const { streamVideo } = require("./video.controller");
 const { createVideo } = require("./upload.controller");
 const upload = require("./upload.middleware");
+const { uploadPdf, uploadPdfMiddleware, servePdf } = require("./pdf.controller");
 
 const app = express();
 
@@ -55,6 +56,21 @@ app.get(
   "/api/videos/:lessonId/:filename",
   auth,
   streamVideo
+);
+
+// upload PDF (chỉ admin / giảng viên)
+app.post(
+  "/api/pdfs",
+  auth,
+  uploadPdfMiddleware,
+  uploadPdf
+);
+
+// serve PDF
+app.get(
+  "/api/pdfs/:lessonId",
+  auth,
+  servePdf
 );
 
 app.listen(3002, () => {
